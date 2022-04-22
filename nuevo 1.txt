@@ -1,0 +1,66 @@
+##FUNCION EXPANDIR NODO
+N=5
+
+datos=[1,2,3,4,5,6,0,0,0,7,8,9,10,11,12,13,0,0,14,0,0,0,0,0,0]
+
+matriz=np.array(datos).reshape(N,N)
+
+
+def expandirnodo(tablero, posactual):
+  L=[]
+  filactual=np.where(tablero==posactual)[0][0] #.where fila columna
+  columnactual=np.where(tablero==posactual)[1][0]#
+  
+  if filactual!=tablero.shape[0]-1: ##tamaño restamos 1 
+
+    pos=tablero[filactual+1][columnactual] ##me puedo mover a la derecha
+    if pos!=0:
+      L.append(pos)
+  
+  if filactual !=0:
+    pos=tablero[filactual-1][columnactual] ##me puedo mover a la izquierda
+    if pos!=0:
+      L.append(pos)
+
+  if columnactual!=tablero.shape[1]-1:
+    pos=tablero[filactual][columnactual+1] # me puedo mover abajo
+    if pos!=0:
+      L.append(pos)
+  
+  if columnactual!=0:
+    pos=tablero[filactual][columnactual-1] #me puedo mover arriba arriba
+    if pos!=0:
+      L.append(pos)
+  
+  return L
+
+##FUNCION BFS
+def bfs (tablero, posinicial, posfinal):
+  Q=[]
+  T=Tree()
+  V=[]
+  Q.append(posinicial)
+  V.append(posinicial)
+  T.create_node(tag=posinicial,identifier=posinicial,data=posinicial)
+  while len(Q)!=0:
+    pos_actual=Q.pop(0)
+    hijos=expandirnodo(tablero,pos_actual)
+    for hijo in hijos:
+      if hijo not in V:
+        T.create_node(tag=hijo,identifier=hijo,parent=pos_actual,data=hijo)
+        V.append(hijo)
+        Q.append(hijo)
+        if hijo==posfinal:
+          T.show()
+          # for key in T.nodes:
+          #   if T.is_ancestor(T.nodes[key].identifier,hijo):
+          #     print(T.nodes[key].data)
+          # print(posfinal)
+          sol = list(T.rsearch(posfinal))
+          sol.reverse()
+          print(sol)
+
+      
+  else:
+    print("no Hay Solución")
+  
